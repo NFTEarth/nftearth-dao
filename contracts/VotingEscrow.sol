@@ -8,7 +8,7 @@ pragma solidity ^0.8.4;
 @notice Votes have a weight depending on time, so that users are
         committed to the future of (whatever they are voting for)
 @dev Vote weight decays linearly over time. Lock time cannot be
-     more than `MAXTIME` (3 years).
+     more than `MAXTIME` (1 year).
 
 # Voting escrow to have time-weighted votes
 # Votes have a weight depending on time, so that users are committed
@@ -21,7 +21,7 @@ pragma solidity ^0.8.4;
 #   |  /
 #   |/
 # 0 +--------+------> time
-#       maxtime (3 years?)
+#       maxtime (1 years)
 */
 
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -59,8 +59,8 @@ contract VotingEscrow is Ownable, ReentrancyGuard {
     event Supply(uint prevSupply, uint supply);
 
     uint internal constant WEEK = 1 weeks;
-    uint public constant MAXTIME = 3 * 365 * 86400;
-    int128 internal constant iMAXTIME = 3 * 365 * 86400;
+    uint public constant MAXTIME = 1 * 365 * 86400;
+    int128 internal constant iMAXTIME = 1 * 365 * 86400;
     uint internal constant MULTIPLIER = 1 ether;
 
     uint public immutable MINTIME;
@@ -80,8 +80,8 @@ contract VotingEscrow is Ownable, ReentrancyGuard {
     address public controller;
     bool public transfersEnabled;
 
-    string public constant name = "veSTG";
-    string public constant symbol = "veSTG";
+    string public constant name = "Staked NFTE";
+    string public constant symbol = "xNFTE";
     string public constant version = "1.0.0";
     uint8 public constant decimals = 18;
 
@@ -90,7 +90,7 @@ contract VotingEscrow is Ownable, ReentrancyGuard {
     mapping(address => bool) public contracts_whitelist;
 
     /// @notice Contract constructor
-    /// @param token_addr `ERC20CRV` token address
+    /// @param token_addr `ERC20NFTE-LP` token address
     constructor(address token_addr, uint min_time) {
         token = token_addr;
         point_history[0].blk = block.number;
